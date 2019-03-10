@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,6 +53,16 @@ public class EtudiantsController {
 	@GetMapping("/etudiants/")
 	public  EtudiantDTO rechercheEtudiant(@RequestParam(value="nom") String nom,@RequestParam(value="prenom")  String prenom, @RequestParam(value="dateNaissance") @DateTimeFormat(pattern="yyyy-MM-dd") Date dateNaissance) throws Exception{
 		return etudiantService.rechercheEtudiant(nom, prenom, dateNaissance);
+	}
+	
+	@GetMapping("/etudiants/search")
+	public  Page<EtudiantDTO> getPagesEtudiantByNom(@RequestParam(value="nom")String nom , Pageable pageable) throws Exception{
+		return etudiantService.getPagesEtudiantByNom(nom, new PageRequest(0, 1));
+	}
+	
+	@GetMapping("/etudiants/pages")
+	public  Page<EtudiantDTO> getAllPagesEtudiant(Pageable pageable){
+		return etudiantService.getAllPagesEtudiant(new PageRequest(0, 2));
 	}
 	
 }

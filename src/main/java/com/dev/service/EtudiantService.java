@@ -4,6 +4,10 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.dev.dto.EtudiantDTO;
@@ -74,4 +78,21 @@ public class EtudiantService {
 			throw new TechnicalException("Error Techinque lors de la recherche");
 		}
 	}
+	
+	public Page<EtudiantDTO> getPagesEtudiantByNom(String nom , Pageable pageable) throws TechnicalException {
+		if (nom != null) {
+			Page<Etudiant> etudiant = etudiantRepository.findAllByNomEtdiant(nom, pageable);
+			List<EtudiantDTO> etudiantDto = etudiantMapper.mapToListDTO(etudiant.getContent());
+			    return new PageImpl<>(etudiantDto, pageable, etudiant.getTotalElements());
+		} else {
+			throw new TechnicalException("Error Techinque lors de la recherche");
+		}
+	}
+	
+	public Page<EtudiantDTO> getAllPagesEtudiant(Pageable pageable) {
+			Page<Etudiant> etudiant = etudiantRepository.findAll(pageable);
+			List<EtudiantDTO> etudiantDto = etudiantMapper.mapToListDTO(etudiant.getContent());
+			    return new PageImpl<>(etudiantDto, pageable, etudiant.getTotalElements());
+		}
+	
 }
